@@ -6,7 +6,11 @@ import Signup from "./components/Signup.jsx";
 import Login from "./components/Login.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./Layout.jsx";
-import Form from "./components/Form.jsx";
+import Recovery from "./components/Recovery.jsx";
+import Reset from "./components/Reset.jsx";
+import Profile from "./components/Profile.jsx";
+import PageNotFound from "./components/PageNotFound.jsx";
+import UserProfile from "./components/Form.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,8 +30,24 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
+        path: "recovery",
+        element: <Recovery></Recovery>,
+      },
+      {
+        path: "reset",
+        element: <Reset />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
         path: "details",
-        element: <Form />,
+        element: <UserProfile />,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },
