@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUserInfo, updateUserAsync } from "../userSlice";
+import {
+  selectUserInfo,
+  selectUserInfoStatus,
+  updateUserAsync,
+} from "../userSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
+  const status = useSelector(selectUserInfoStatus);
+
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
 
@@ -23,11 +29,14 @@ export default function UserProfile() {
       (existingAddress, i) =>
         i !== index &&
         existingAddress.name === addressUpdate.name &&
-        existingAddress.email === addressUpdate.email
+        existingAddress.email === addressUpdate.email &&
+        existingAddress.street === addressUpdate.street &&
+        existingAddress.pinCode === addressUpdate.pinCode &&
+        existingAddress.state === addressUpdate.state &&
+        existingAddress.phone === addressUpdate.phone
     );
 
     if (isDuplicate) {
-      // Handle duplicate address (e.g., show an error message)
       console.error("Duplicate address found!");
       toast.error("Duplicate address found!");
       return;
@@ -71,24 +80,29 @@ export default function UserProfile() {
     const isDuplicate = userInfo.addresses.some(
       (existingAddress) =>
         existingAddress.name === address.name &&
-        existingAddress.email === address.email
+        existingAddress.email === address.email &&
+        existingAddress.street === address.street &&
+        existingAddress.pinCode === address.pinCode &&
+        existingAddress.state === address.state &&
+        existingAddress.phone === address.phone
     );
-
+  
     if (isDuplicate) {
-      // Handle duplicate address (e.g., show an error message)
       toast.error("Duplicate address found!");
       console.error("Duplicate address found!");
       return;
     }
+  
     const newUser = {
       ...userInfo,
       addresses: [...userInfo.addresses, address],
     };
     dispatch(updateUserAsync(newUser));
     setShowAddAddressForm(false);
-
+  
     toast.success("Address added successfully!");
   };
+  
 
   return (
     <div className="h-full">
@@ -231,6 +245,11 @@ export default function UserProfile() {
                           type="text"
                           {...register("street", {
                             required: "street is required",
+                            pattern: {
+                              value:
+                                /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                              message: "Invalid street address",
+                            },
                           })}
                           id="street"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -255,6 +274,11 @@ export default function UserProfile() {
                           type="text"
                           {...register("city", {
                             required: "city is required",
+                            pattern: {
+                              value:
+                                /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                              message: "Invalid street address",
+                            },
                           })}
                           id="city"
                           autoComplete="address-level2"
@@ -278,6 +302,11 @@ export default function UserProfile() {
                           type="text"
                           {...register("state", {
                             required: "state is required",
+                            pattern: {
+                              value:
+                                /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                              message: "Invalid street address",
+                            },
                           })}
                           id="state"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -337,13 +366,7 @@ export default function UserProfile() {
             </form>
           ) : null}
 
-          {userInfo.addresses.length > 0 ? (
-            userInfo.addresses.map((address, index) => (
-              <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No current address</p>
-          )}
+          <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
           {userInfo.addresses.map((address, index) => (
             <div key={index}>
               {selectedEditIndex === index ? (
@@ -458,6 +481,11 @@ export default function UserProfile() {
                               type="text"
                               {...register("street", {
                                 required: "street is required",
+                                pattern: {
+                                  value:
+                                    /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                                  message: "Invalid street address",
+                                },
                               })}
                               id="street"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -482,6 +510,11 @@ export default function UserProfile() {
                               type="text"
                               {...register("city", {
                                 required: "city is required",
+                                pattern: {
+                                  value:
+                                    /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                                  message: "Invalid street address",
+                                },
                               })}
                               id="city"
                               autoComplete="address-level2"
@@ -507,6 +540,11 @@ export default function UserProfile() {
                               type="text"
                               {...register("state", {
                                 required: "state is required",
+                                pattern: {
+                                  value:
+                                    /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
+                                  message: "Invalid street address",
+                                },
                               })}
                               id="state"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

@@ -31,9 +31,28 @@ export const fetchLoggedInUserAsync = createAsyncThunk(
 
 export const updateUserAsync = createAsyncThunk(
   'user/updateUser',
-  async (update) => {
-    // this is name mistake
+  async (update, { getState }) => {
+    // Retrieve the current user info from the Redux state
+    const currentUserInfo = selectUserInfo(getState());
+
+    // Check for duplicate addresses
+    const isDuplicate = currentUserInfo.addresses.some(existingAddress =>
+      existingAddress.name === update.name &&
+      existingAddress.email === update.email &&
+      existingAddress.phone === update.phone &&
+      existingAddress.street === update.street &&
+      existingAddress.city === update.city &&
+      existingAddress.state === update.state &&
+      existingAddress.pinCode === update.pinCode
+    );
+
+    if (isDuplicate) {
+      throw new Error('Duplicate address found!');
+    }
+
+    // Proceed with updating the user if it's not a duplicate
     const response = await updateUser(update);
+
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
