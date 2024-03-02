@@ -63,7 +63,7 @@ export default function UserProfile() {
     setValue("phone", address.phone);
     setValue("street", address.street);
     toast("Editing address. Make your changes and click 'Save Address'.", {
-      icon: "🖊️",
+      icon: "✍🏻",
     });
   };
 
