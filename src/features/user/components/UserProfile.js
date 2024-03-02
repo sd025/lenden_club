@@ -25,12 +25,12 @@ export default function UserProfile() {
   } = useForm();
 
   const handleEdit = (addressUpdate, index) => {
-    const isDuplicate = userInfo.addresses.some(
-      (existingAddress, i) =>
-        (i !== index && existingAddress.name === addressUpdate.name) ||
-        existingAddress.email === addressUpdate.email ||
-        existingAddress.phone === addressUpdate.phone
-    );
+    const isDuplicate = userInfo.addresses.some((existingAddress, i) =>
+    i !== index &&
+    (existingAddress.name === addressUpdate.name ||
+      existingAddress.email === addressUpdate.email ||
+      existingAddress.phone === addressUpdate.phone)
+  );
 
     if (isDuplicate) {
       console.error("Duplicate address found!");
