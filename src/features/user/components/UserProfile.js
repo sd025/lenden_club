@@ -79,11 +79,11 @@ export default function UserProfile() {
   const handleAdd = (address) => {
     const isDuplicate = userInfo.addresses.some(
       (existingAddress) =>
-        existingAddress.name === address.name &&
-        existingAddress.email === address.email &&
-        existingAddress.street === address.street &&
-        existingAddress.pinCode === address.pinCode &&
-        existingAddress.state === address.state &&
+        existingAddress.name === address.name ||
+        existingAddress.email === address.email ||
+        existingAddress.street === address.street ||
+        existingAddress.pinCode === address.pinCode ||
+        existingAddress.state === address.state ||
         existingAddress.phone === address.phone
     );
   
