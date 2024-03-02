@@ -27,12 +27,8 @@ export default function UserProfile() {
   const handleEdit = (addressUpdate, index) => {
     const isDuplicate = userInfo.addresses.some(
       (existingAddress, i) =>
-        i !== index &&
-        existingAddress.name === addressUpdate.name &&
-        existingAddress.email === addressUpdate.email &&
-        existingAddress.street === addressUpdate.street &&
-        existingAddress.pinCode === addressUpdate.pinCode &&
-        existingAddress.state === addressUpdate.state &&
+        (i !== index && existingAddress.name === addressUpdate.name) ||
+        existingAddress.email === addressUpdate.email ||
         existingAddress.phone === addressUpdate.phone
     );
 
@@ -81,28 +77,24 @@ export default function UserProfile() {
       (existingAddress) =>
         existingAddress.name === address.name ||
         existingAddress.email === address.email ||
-        existingAddress.street === address.street ||
-        existingAddress.pinCode === address.pinCode ||
-        existingAddress.state === address.state ||
         existingAddress.phone === address.phone
     );
-  
+
     if (isDuplicate) {
       toast.error("Duplicate address found!");
       console.error("Duplicate address found!");
       return;
     }
-  
+
     const newUser = {
       ...userInfo,
       addresses: [...userInfo.addresses, address],
     };
     dispatch(updateUserAsync(newUser));
     setShowAddAddressForm(false);
-  
+
     toast.success("Address added successfully!");
   };
-  
 
   return (
     <div className="h-full">
@@ -277,7 +269,7 @@ export default function UserProfile() {
                             pattern: {
                               value:
                                 /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
-                              message: "Invalid street address",
+                              message: "Invalid City address",
                             },
                           })}
                           id="city"
@@ -305,7 +297,7 @@ export default function UserProfile() {
                             pattern: {
                               value:
                                 /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
-                              message: "Invalid street address",
+                              message: "Invalid state address",
                             },
                           })}
                           id="state"
@@ -331,7 +323,7 @@ export default function UserProfile() {
                             required: "pinCode is required",
                             pattern: {
                               value: /^\d{6}$/,
-                              message: "Invalid ZIP/Postal code",
+                              message: "Invalid ZIP / Postal code",
                             },
                           })}
                           id="pinCode"
@@ -454,7 +446,7 @@ export default function UserProfile() {
                               {...register("phone", {
                                 required: "phone is required",
                                 pattern: {
-                                  value: /^[0-9]{10}$/, // Assuming a 10-digit phone number, adjust as needed
+                                  value: /^[0-9]{10}$/,
                                   message: "Invalid phone number",
                                 },
                               })}
@@ -513,7 +505,7 @@ export default function UserProfile() {
                                 pattern: {
                                   value:
                                     /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
-                                  message: "Invalid street address",
+                                  message: "Invalid city address",
                                 },
                               })}
                               id="city"
@@ -543,7 +535,7 @@ export default function UserProfile() {
                                 pattern: {
                                   value:
                                     /^(([A-za-z]+[\s]{1}[A-za-z]+)|([A-Za-z]+))$/,
-                                  message: "Invalid street address",
+                                  message: "Invalid state address",
                                 },
                               })}
                               id="state"
@@ -571,7 +563,7 @@ export default function UserProfile() {
                                 required: "pinCode is required",
                                 pattern: {
                                   value: /^\d{6}$/,
-                                  message: "Invalid ZIP/Postal code",
+                                  message: "Invalid ZIP / Postal code",
                                 },
                               })}
                               id="pinCode"
@@ -609,13 +601,13 @@ export default function UserProfile() {
                 <div className="flex gap-x-4">
                   <div className="min-w-0 flex-auto">
                     <p className="text-sm font-semibold leading-6 text-gray-900">
-                      {address.name}
+                      Name: {address.name}
                     </p>
                     <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {address.street}
+                      Street: {address.street}
                     </p>
                     <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {address.pinCode}
+                      ZIP / Postal: {address.pinCode}
                     </p>
                   </div>
                 </div>
@@ -624,7 +616,7 @@ export default function UserProfile() {
                     Phone: {address.phone}
                   </p>
                   <p className="text-sm leading-6 text-gray-500">
-                    {address.city}
+                    City: {address.city}
                   </p>
                 </div>
                 <div className="hidden sm:flex sm:flex-col sm:items-end">
